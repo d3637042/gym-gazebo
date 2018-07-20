@@ -38,10 +38,10 @@ else
 fi
 
 #copy altered urdf model
-cp -r ../assets/urdf/kobuki_urdf/urdf/ catkin_ws/src/kobuki/kobuki_description
+cp -r ../assets/urdf/kobuki_urdf/urdf/ ./catkin_ws/src/kobuki/kobuki_description
 
 #copy laser mesh file
-cp ../assets/meshes/lidar_lite_v2_withRay.dae catkin_ws/src/kobuki/kobuki_description/meshes
+cp ../assets/meshes/lidar_lite_v2_withRay.dae ./catkin_ws/src/kobuki/kobuki_description/meshes
  
 exec bash # reload bash
 

@@ -19,4 +19,10 @@ Run tests in the base image. Simply enter the following command, all you need is
 docker run --runtime=nvidia --rm austinderic/gym-gazebo:kinetic-nvidia9.2 /bin/bash -c "nvidia-smi; echo $(rosversion -d); pip show gym; pip show gym-gazebo"
 ```
 
-
+## Manual Method
+```
+mkdir -p ./catkin_ws/src
+cd ./catkin_ws/src
+wstool initW
+wstool merge https://raw.githubusercontent.com/turtlebot/turtlebot/kinetic/turtlebot.rosinstall && wstool merge ../../gym-gazebo/gym_gazebo/envs/installation/gym-gazebo.rosinstall
+```
