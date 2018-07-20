@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y \
     libusb-dev \
     libsdl-dev \
     libsdl-image1.2-dev \
+    python-skimage \
     && rm -rf /var/lib/apt/lists/*
 
 #--------------------
@@ -40,5 +41,14 @@ WORKDIR /root/catkin_ws/src
 RUN wstool init
 RUN wstool merge https://gist.githubusercontent.com/AustinDeric/3362c86437d88347807beaba3501602e/raw/ecadfddc98a1865dfe60b29d17ff03a513b39279/gym-gazebo.rosinstall
 RUN wstool update
-WORKDIR /root/catkin_ws/src
+WORKDIR /root/catkin_ws
+RUN /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin build"
+RUN echo "source /root/catkin_ws/devel/setup.bash" >> ~/.bashrc
 
+#--------------------
+# Setup environment variables
+#------------------
+RUN echo "export GYM_GAZEBO_WORLD_CIRCUIT2=/root/gym-gazebo/gym_gazebo/envs/assets/worlds/circuit2.world" >> ~/.bashrc
+RUN export GYM_GAZEBO_WORLD_CIRCUIT2=/root/gym-gazebo/gym_gazebo/envs/assets/worlds/circuit2.world
+
+WORKDIR /root/
