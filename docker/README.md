@@ -26,13 +26,11 @@ docker run \
 ```
 This will open a bash shell in the container:
 ```
-python ./gym-gazebo/examples/turtlebot/circuit2_turtlebot_lidar_qlearn.py
+python /root/gym-gazebo/examples/turtlebot/circuit2_turtlebot_lidar_qlearn.py
 ```
 then we can connect to our new container 
 ```
-export GAZEBO_MASTER_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' gym-gazebo-turtlebot)
-export GAZEBO_MASTER_URI=$GAZEBO_MASTER_IP:11345
-sudo gzclient --verbose
+export GAZEBO_MASTER_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' gym-gazebo-turtlebot) && export GAZEBO_MASTER_URI=$GAZEBO_MASTER_IP:11345 && sudo gzclient --verbose
 ```
 
 Run tests in the base image. Simply enter the following command, all you need is nvidia-docker2 setup:
