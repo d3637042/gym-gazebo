@@ -1,32 +1,9 @@
 FROM austinderic/gym-gazebo:melodic
 LABEL maintainer "Austin.Deric@gmail.org"
 
-#--------------------
-# Install Gym-Gazebo Turtlebot3 dependencies
-#------------------
-
-RUN apt-get update && apt-get install -y \
-    ros-melodic-geometry2 \
-    ros-melodic-xacro \
-    ros-melodic-roslint \
-    ros-melodic-ros-control \
-    ros-melodic-image-common \
-    ros-melodic-control-toolbox \
-    ros-melodic-gazebo-ros-pkgs \
-    ros-melodic-roslint \
-    ros-melodic-joystick-drivers \
-    ros-melodic-ecl \
-    ros-melodic-pcl-ros \
-    ros-melodic-yocs-msgs \
-    libbullet-dev \
-    libusb-dev \
-    libsdl-dev \
-    libsdl-image1.2-dev \
-    libftdi-dev \
-    mesa-utils \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN pip install scikit-image
+RUN git clone -b devel https://github.com/AustinDeric/gym-gazebo.git /root/gym-gazebo
+WORKDIR /root/gym-gazebo
+RUN pip install -e .
 
 #--------------------
 # Install Gym-Gazebo Turtlebot Example
@@ -35,7 +12,7 @@ RUN pip install scikit-image
 RUN mkdir -p /root/catkin_ws/src
 WORKDIR /root/catkin_ws/src
 RUN wstool init
-RUN wstool merge https://gist.githubusercontent.com/AustinDeric/c14633f1d5bcabc14307dcca2425d133/raw/266668674782d5e1096ecd13f3ea6dcf5af5248a/gym-gazebo-turtlebot-melodic.rosinstall
+RUN wstool merge https://gist.githubusercontent.com/AustinDeric/8bb2648e9281d62c7055911e7cedcdae/raw/da49a1a014cd106dbae1e792224abc5efe4d2c31/gym-gazebo-turtlebot3-melodic.rosinstall
 RUN wstool update
 WORKDIR /root/catkin_ws
 RUN /bin/bash -c "source /opt/ros/melodic/setup.bash && catkin build"
