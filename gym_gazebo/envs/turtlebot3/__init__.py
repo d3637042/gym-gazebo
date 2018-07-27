@@ -1,0 +1,2 @@
+from gym_gazebo.envs.turtlebot3.gazebo_circuit2_turtlebot3_lidar import GazeboCircuit2Turtlebot3LidarEnv
+

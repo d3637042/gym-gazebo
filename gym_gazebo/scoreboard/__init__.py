@@ -44,6 +44,11 @@ add_task(
     summary='Obstacle avoidance in a Circuit 2.',
 )
 add_task(
+    id='GazeboCircuit2Turtlebot3Lidar-v0',
+    group='gazebo',
+    summary='Obstacle avoidance in a Circuit 2.',
+)
+add_task(
     id='GazeboCircuit2TurtlebotLidarNn-v0',
     group='gazebo',
     summary='Obstacle avoidance in a Circuit 2 using continuous data.',

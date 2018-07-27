@@ -10,14 +10,14 @@ RUN apt-get update && apt-get install -y \
     python-rosinstall-generator \
     python-wstool \
     build-essential \
-    python-pip\
+    python-pip \
+    nano \
     && rm -rf /var/lib/apt/lists/*
 
 # Unofficial ROS installation steps
 RUN pip install --upgrade pip
 
 RUN pip install -U catkin_tools
-
 
 #--------------------
 # Install OpenAI gym
@@ -29,10 +29,7 @@ RUN pip install gym
 # Install gym-gazebo
 #--------------------
 
-RUN git clone https://github.com/erlerobot/gym-gazebo.git /root/gym-gazebo
-WORKDIR /root/gym-gazebo
-RUN pip install -e .
-
-
-
+#RUN git clone -b devel https://github.com/AustinDeric/gym-gazebo.git /root/gym-gazebo
+#WORKDIR /root/gym-gazebo
+#RUN pip install -e .
 
