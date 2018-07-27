@@ -1,5 +1,6 @@
 <launch>
   <arg name="world_file"  default="$(optenv GYM_GAZEBO_WORLD_CIRCUIT2 /root/gym-gazebo/gym_gazebo/envs/assets/worlds/circuit2.world)"/>
+  <arg name="gui"  default="true"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="use_sim_time" value="true"/>
