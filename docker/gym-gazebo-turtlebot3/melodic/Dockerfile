@@ -1,10 +1,6 @@
 FROM austinderic/gym-gazebo:melodic
 LABEL maintainer "Austin.Deric@gmail.org"
 
-RUN git clone -b devel https://github.com/AustinDeric/gym-gazebo.git /root/gym-gazebo
-WORKDIR /root/gym-gazebo
-RUN pip install -e .
-
 #--------------------
 # Install Gym-Gazebo Turtlebot Example
 #------------------

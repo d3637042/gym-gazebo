@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     python-pip \
     nano \
+    gdb \
     && rm -rf /var/lib/apt/lists/*
 
 # Unofficial ROS installation steps
@@ -29,7 +30,7 @@ RUN pip install gym
 # Install gym-gazebo
 #--------------------
 
-#RUN git clone -b devel https://github.com/AustinDeric/gym-gazebo.git /root/gym-gazebo
-#WORKDIR /root/gym-gazebo
-#RUN pip install -e .
+RUN git clone -b devel https://github.com/AustinDeric/gym-gazebo.git /root/gym-gazebo
+WORKDIR /root/gym-gazebo
+RUN pip install -e .
 
