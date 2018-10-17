@@ -68,4 +68,10 @@
       <param name="modelstates_index" value="1" type="int" />
   </node>
 
+  <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan">
+
+        <remap from="cloud_in" to="/velodyne_points"/>
+        <remap from="scan" to="$/scan"/>
+
+  </node>
 </launch>
