@@ -158,13 +158,13 @@ RUN git clone https://github.com/tu-darmstadt-ros-pkg/hector_gazebo
 
 WORKDIR /root/robotx_gazebo/catkin_ws
 
-RUN /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make -j"; exit 0
+RUN /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make -j4"; exit 0
 
-RUN /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make -j"; exit 0
+RUN /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make -j4"; exit 0
 
-RUN /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make -j"; exit 0
+RUN /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make -j4"; exit 0
 
-RUN /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make -j"; exit 0
+RUN /bin/bash -c "source /opt/ros/kinetic/setup.bash && catkin_make -j4"; exit 0
 
 WORKDIR /root/
 

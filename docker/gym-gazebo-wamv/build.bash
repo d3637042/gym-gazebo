@@ -1,1 +1,1 @@
-docker build --tag ros-kinetic-gazebo-gym-nvidia9.0 .
+docker build --tag d3637042/ros-kinetic-gazebo-gym-nvidia9.0 .

@@ -22,7 +22,7 @@ docker run \
     -p 11345:11345 \
     -p 11311:11311 \
     --name=ros-kinetic-gazebo-gym-nvidia9.0 \
-    os-kinetic-gazebo-gym-nvidia9.0:latest \
+    d3637042/ros-kinetic-gazebo-gym-nvidia9.0:latest \
     /bin/bash
 ```
 This will open a bash shell in the container:
