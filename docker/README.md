@@ -20,33 +20,18 @@ docker run \
     -it \
     -p 11345:11345 \
     -p 11311:11311 \
-    --name=gym-gazebo-turtlebot \
-    austinderic/gym-gazebo-turtlebot:kinetic-nvidia9.2 \
+    --name=ros-kinetic-gazebo-gym-nvidia9.0 \
+    os-kinetic-gazebo-gym-nvidia9.0:latest \
     /bin/bash
 ```
 This will open a bash shell in the container:
 ```
-python /root/gym-gazebo/examples/turtlebot/circuit2_turtlebot_lidar_qlearn.py
+python /root/gym-gazebo/examples/wamv/robotx_lidar_qlearn.py
 ```
+
 then we can connect to our new container 
 ```
-export GAZEBO_MASTER_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' gym-gazebo-turtlebot) && export GAZEBO_MASTER_URI=$GAZEBO_MASTER_IP:11345 && sudo gzclient --verbose
+export GAZEBO_MASTER_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' ros-kinetic-gazebo-gym-nvidia9.0 ) && export GAZEBO_MASTER_URI=$GAZEBO_MASTER_IP:11345 && sudo gzclient --verbose
 ```
 
-Run tests in the base image. Simply enter the following command, all you need is nvidia-docker2 setup:
-```
-docker run --runtime=nvidia --rm austinderic/gym-gazebo:kinetic-nvidia9.2 /bin/bash -c "nvidia-smi; echo $(rosversion -d); pip show gym; pip show gym-gazebo"
-``` 
-Even easier with docker-compose:
-```
-docker-compose up
-```
-
-## Manual Method
-```
-mkdir -p ./catkin_ws/src
-cd ./catkin_ws/src
-wstool initW
-wstool merge https://raw.githubusercontent.com/turtlebot/turtlebot/kinetic/turtlebot.rosinstall && wstool merge ../../gym-gazebo/gym_gazebo/envs/installation/gym-gazebo.rosinstall
-```
 
