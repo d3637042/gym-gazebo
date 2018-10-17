@@ -22,7 +22,7 @@ def render():
 
 if __name__ == '__main__':
 
-    env = gym.make('GazeboRobotXLidarEnv')
+    env = gym.make('GazeboRobotX-v0')
 
     outdir = '/tmp/gazebo_gym_experiments'
     env = gym.wrappers.Monitor(env, outdir, force=True)
