@@ -5,6 +5,12 @@ logger = logging.getLogger(__name__)
 
 # Gazebo
 # ----------------------------------------
+# WAMV ens
+register(
+    id='GazeboRobotX-v0',
+    entry_point='gym_gazebo.envs.wamv:GazeboRobotXLidarEnv',
+    # More arguments here
+)
 
 # Turtlebot envs
 register(
