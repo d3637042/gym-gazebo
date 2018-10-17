@@ -13,6 +13,7 @@ This fodler is setup such that each image has its own folder is an image and eac
 
 ## Recommended (Easy) Method
 ```
+xhost +"local:docker@"
 docker run \
     --runtime=nvidia \
     -v="/tmp/.gazebo/:/root/.gazebo/" \
