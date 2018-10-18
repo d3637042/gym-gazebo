@@ -5,7 +5,7 @@ Refer to [INSTALL.md](INSTALL.md)
 
 ## Usage
 
-Refer to [README.md](gym-gazebo/docker/README.md)
+Refer to [README.md](gym-gazebo/docker/docker/README.md)
 
 ### Display reward plot
 
