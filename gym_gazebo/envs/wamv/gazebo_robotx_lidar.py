@@ -3,14 +3,16 @@ import rospy
 import roslaunch
 import time
 import numpy as np
+import sensor_msgs.point_cloud2
 
+from math import sqrt
 from robotx_gazebo.msg import UsvDrive
 from gym import utils, spaces
 from gym_gazebo.envs import gazebo_env
 from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty
 
-from sensor_msgs.msg import LaserScan
+from sensor_msgs.msg import PointCloud2
 
 from gym.utils import seeding
 
@@ -23,26 +25,37 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
-
+        
         self.action_space = spaces.Discrete(3) #F,L,R
         self.reward_range = (-np.inf, np.inf)
 
         self._seed()
 
+
     def discretize_observation(self,data,new_ranges):
         discretized_ranges = []
-        min_range = 0.2
+        min_range = 5
         done = False
-        mod = len(data.ranges)/new_ranges
-        for i, item in enumerate(data.ranges):
+        mod = data.width/new_ranges
+        point_arr = []
+
+        for point in sensor_msgs.point_cloud2.read_points(data, skip_nans=True):
+            pt_x = point[0]
+            pt_y = point[1]
+            distance = sqrt(pt_x**2 + pt_y**2)
+            
+            if (distance>=3.5 and distance<=20):
+                point_arr.append(distance)      
+
+        for i, item in enumerate(point_arr):
             if (i%mod==0):
-                if data.ranges[i] == float ('Inf') or np.isinf(data.ranges[i]):
+                if point_arr[i] == float ('Inf') or np.isinf(point_arr[i]):
                     discretized_ranges.append(6)
-                elif np.isnan(data.ranges[i]):
+                elif np.isnan(point_arr[i]):
                     discretized_ranges.append(0)
                 else:
-                    discretized_ranges.append(int(data.ranges[i]))
-            if (min_range > data.ranges[i] > 0):
+                    discretized_ranges.append(int(point_arr[i]))
+            if (min_range > point_arr[i] > 0):
                 done = True
         return discretized_ranges,done
 
@@ -51,7 +64,6 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
         return [seed]
 
     def _step(self, action):
-
         rospy.wait_for_service('/gazebo/unpause_physics')
         try:
             self.unpause()
@@ -77,7 +89,7 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
         data = None
         while data is None:
             try:
-                data = rospy.wait_for_message('/scan', LaserScan, timeout=5)
+                data = rospy.wait_for_message('/velodyne_points', PointCloud2, timeout=5)
             except:
                 pass
 
@@ -92,7 +104,7 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
 
         if not done:
             if action == 0:
-                reward = 5
+                reward = 10
             else:
                 reward = 1
         else:
@@ -122,7 +134,7 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
         data = None
         while data is None:
             try:
-                data = rospy.wait_for_message('/scan', LaserScan, timeout=5)
+                data = rospy.wait_for_message('/velodyne_points', PointCloud2, timeout=5)
             except:
                 pass
 
@@ -134,5 +146,6 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
             print ("/gazebo/pause_physics service call failed")
 
         state = self.discretize_observation(data,5)
+
 
         return state
