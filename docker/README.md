@@ -30,7 +30,6 @@ d3637042/ros-kinetic-gazebo-gym
 xhost +"local:docker@"
 docker pull d3637042/ros-kinetic-gazebo-gym:latest
 docker run \
-    --runtime=nvidia \
     -v="/tmp/.gazebo/:/root/.gazebo/" \
     --rm \
     -it \
