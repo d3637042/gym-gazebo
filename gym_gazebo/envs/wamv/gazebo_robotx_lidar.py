@@ -34,7 +34,7 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
 
     def discretize_observation(self,data,new_ranges):
         discretized_ranges = []
-        min_range = 5
+        min_range = 3.5
         done = False
         mod = data.width/new_ranges
         point_arr = []
@@ -50,11 +50,11 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
         for i, item in enumerate(point_arr):
             if (i%mod==0):
                 if point_arr[i] == float ('Inf') or np.isinf(point_arr[i]):
-                    discretized_ranges.append(6)
+                    discretized_ranges.append(10)
                 elif np.isnan(point_arr[i]):
                     discretized_ranges.append(0)
                 else:
-                    discretized_ranges.append(int(point_arr[i]))
+                    discretized_ranges.append(int(point_arr[i]/2))
             if (min_range > point_arr[i] > 0):
                 done = True
         return discretized_ranges,done
@@ -85,7 +85,6 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
             vel_cmd.right = -500
             vel_cmd.left = 500
             self.vel_pub.publish(vel_cmd)
-        rospy.sleep(1)
         data = None
         while data is None:
             try:
@@ -106,7 +105,7 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
             if action == 0:
                 reward = 10
             else:
-                reward = 1
+                reward = 0
         else:
             reward = -200
 

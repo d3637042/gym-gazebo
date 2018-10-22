@@ -2,7 +2,8 @@
 *.pyc
 *.py~
 .DS_Store
-script
+examples/wamv/log.txt
+
 # Setuptools distribution and build folders.
 /dist/
 /build

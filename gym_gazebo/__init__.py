@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 register(
     id='GazeboRobotX-v0',
     entry_point='gym_gazebo.envs.wamv:GazeboRobotXLidarEnv',
+    max_episode_steps=100
     # More arguments here
 )
 

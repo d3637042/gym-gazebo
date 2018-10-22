@@ -79,7 +79,7 @@ if __name__ == '__main__':
             else:
                 last_time_steps = numpy.append(last_time_steps, [int(i + 1)])
                 break
-
+        print i
         if x%10==0:
             qlearn.saveQ()
             #plotter.plot(env)
