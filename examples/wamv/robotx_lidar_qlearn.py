@@ -31,8 +31,8 @@ if __name__ == '__main__':
     last_time_steps = numpy.ndarray(0)
 
     qlearn = qlearn.QLearn(actions=range(env.action_space.n),
-                    alpha=0.2, gamma=0.8, epsilon=0.9)
-
+                    alpha=0.8, gamma=0.8, epsilon=0.9)
+    qlearn.loadQ()
     initial_epsilon = qlearn.epsilon
 
     epsilon_discount = 0.9986
@@ -62,7 +62,7 @@ if __name__ == '__main__':
 
             # Execute the action and get feedback
             observation, reward, done, info = env.step(action)
-            print(observation)
+            #print(observation)
             cumulated_reward += reward
 
             if highest_reward < cumulated_reward:
@@ -80,8 +80,9 @@ if __name__ == '__main__':
                 last_time_steps = numpy.append(last_time_steps, [int(i + 1)])
                 break
 
-        if x%100==0:
-            plotter.plot(env)
+        if x%10==0:
+            qlearn.saveQ()
+            #plotter.plot(env)
 
         m, s = divmod(int(time.time() - start_time), 60)
         h, m = divmod(m, 60)

@@ -72,20 +72,20 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
 
         if action == 0: #FORWARD
             vel_cmd = UsvDrive()
-            vel_cmd.right = 300
-            vel_cmd.left = 300
+            vel_cmd.right = 500
+            vel_cmd.left = 500
             self.vel_pub.publish(vel_cmd)
         elif action == 1: #LEFT
             vel_cmd = UsvDrive()
-            vel_cmd.right = 300
-            vel_cmd.left = 0
+            vel_cmd.right = 500
+            vel_cmd.left = -500
             self.vel_pub.publish(vel_cmd)
         elif action == 2: #RIGHT
             vel_cmd = UsvDrive()
-            vel_cmd.right = 0
-            vel_cmd.left = 300
+            vel_cmd.right = -500
+            vel_cmd.left = 500
             self.vel_pub.publish(vel_cmd)
-
+        rospy.sleep(1)
         data = None
         while data is None:
             try:

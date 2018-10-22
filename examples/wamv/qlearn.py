@@ -1,5 +1,5 @@
 import random
-
+import pickle
 class QLearn:
     def __init__(self, actions, epsilon, alpha, gamma):
         self.q = {}
@@ -7,7 +7,18 @@ class QLearn:
         self.alpha = alpha      # discount constant
         self.gamma = gamma      # discount factor
         self.actions = actions
-
+    def loadQ(self):
+        try:
+            pkl_file = open('q_table.pkl', 'rb')
+            self.q = pickle.load(pkl_file)
+            print "q table loaded"
+        except:
+            print "q table not found"
+    def saveQ(self):
+        output = open('q_table.pkl', 'wb')
+        pickle.dump(self.q, output)
+        output.close()
+        print "q table saved"
     def getQ(self, state, action):
         return self.q.get((state, action), 0.0)
 
