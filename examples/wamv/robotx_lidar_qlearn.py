@@ -41,6 +41,7 @@ if __name__ == '__main__':
     total_episodes = 10000
     highest_reward = 0
 
+    
     for x in range(total_episodes):
         done = False
 

@@ -15,7 +15,7 @@ from std_srvs.srv import Empty
 from sensor_msgs.msg import PointCloud2
 
 from gym.utils import seeding
-
+from random import randint
 class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):
@@ -31,6 +31,15 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
 
         self._seed()
 
+    def random_moves(self):
+        count = randint(0,9)
+        for i in range(count):
+            vel_cmd = UsvDrive()
+            vel_cmd.right = -500
+            vel_cmd.left = 500
+            self.vel_pub.publish(vel_cmd)
+            rospy.sleep(0.5)
+        print "count", count
 
     def discretize_observation(self,data,new_ranges):
         discretized_ranges = []
@@ -136,7 +145,7 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
                 data = rospy.wait_for_message('/velodyne_points', PointCloud2, timeout=5)
             except:
                 pass
-
+        self.random_moves()
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
             #resp_pause = pause.call()
