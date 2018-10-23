@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
             # Execute the action and get feedback
             observation, reward, done, info = env.step(action)
-            #print(observation)
+            print(observation)
             cumulated_reward += reward
 
             if highest_reward < cumulated_reward:

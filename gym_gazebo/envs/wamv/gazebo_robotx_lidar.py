@@ -42,8 +42,8 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
         print "count", count
 
     def discretize_observation(self,data,new_ranges):
-        discretized_ranges = np.ones(new_ranges)*10
-        min_range = 4
+        discretized_ranges = np.ones(new_ranges)*20
+        min_range = 5
         done = False
         mod = data.width/new_ranges
         point_arr = []
@@ -53,14 +53,14 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
             pt_y = point[1]
             distance = sqrt(pt_x**2 + pt_y**2)
             angle = atan2(pt_y, pt_x)
-            if (np.abs(pt_x) > 1.5 and pt_y > 2.5 and distance <= 20 and angle >=0):
+            if ((np.abs(pt_x) > 1.5 or pt_y > 2.5) and distance <= 20 and angle >=0):
                 point_arr.append(distance)      
                 angle_arr.append(angle)
         for i, item in enumerate(point_arr):
             k = int(angle_arr[i]/(np.pi/new_ranges))
             if point_arr[i] == float ('Inf') or np.isinf(point_arr[i]):
-                if discretized_ranges[k] < 10:
-                    discretized_ranges[k] = 10
+                if discretized_ranges[k] < 20:
+                    discretized_ranges[k] = 20
             elif np.isnan(point_arr[i]):
                 if discretized_ranges[k] > 0:
                     discretized_ranges[k] = 0
