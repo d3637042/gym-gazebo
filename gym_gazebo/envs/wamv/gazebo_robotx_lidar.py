@@ -5,7 +5,7 @@ import time
 import numpy as np
 import sensor_msgs.point_cloud2
 
-from math import sqrt
+from math import sqrt, atan2
 from robotx_gazebo.msg import UsvDrive
 from gym import utils, spaces
 from gym_gazebo.envs import gazebo_env
@@ -42,28 +42,31 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
         print "count", count
 
     def discretize_observation(self,data,new_ranges):
-        discretized_ranges = []
+        discretized_ranges = np.ones(new_ranges)*10
         min_range = 3.5
         done = False
         mod = data.width/new_ranges
         point_arr = []
-
+        angle_arr = []
         for point in sensor_msgs.point_cloud2.read_points(data, skip_nans=True):
             pt_x = point[0]
             pt_y = point[1]
             distance = sqrt(pt_x**2 + pt_y**2)
-            
-            if (distance>=3.5 and distance<=20):
+            angle = atan2(pt_y, pt_x)
+            if (distance>=3.5 and distance<=20 and angle >=0):
                 point_arr.append(distance)      
-
+                angle_arr.append(angle)
         for i, item in enumerate(point_arr):
-            if (i%mod==0):
-                if point_arr[i] == float ('Inf') or np.isinf(point_arr[i]):
-                    discretized_ranges.append(10)
-                elif np.isnan(point_arr[i]):
-                    discretized_ranges.append(0)
-                else:
-                    discretized_ranges.append(int(point_arr[i]/2))
+            k = int(angle_arr[i]/(np.pi/new_ranges))
+            if point_arr[i] == float ('Inf') or np.isinf(point_arr[i]):
+                if discretized_ranges[k] < 10:
+                    discretized_ranges[k] = 10
+            elif np.isnan(point_arr[i]):
+                if discretized_ranges[k] > 0:
+                    discretized_ranges[k] = 0
+            else:
+                if discretized_ranges[k] > point_arr[i]:
+                    discretized_ranges[k] = point_arr[i]
             if (min_range > point_arr[i] > 0):
                 done = True
         return discretized_ranges,done
