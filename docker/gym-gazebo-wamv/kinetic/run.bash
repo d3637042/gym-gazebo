@@ -1,5 +1,4 @@
 docker run \
-  --runtime=nvidia \
     -v="/tmp/.gazebo/:/root/.gazebo/" \
     --rm \
     -it \
