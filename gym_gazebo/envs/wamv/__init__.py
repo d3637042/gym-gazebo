@@ -1,1 +1,2 @@
 from gym_gazebo.envs.wamv.gazebo_robotx_lidar import GazeboRobotXLidarEnv
+from gym_gazebo.envs.wamv.gazebo_robotx_lidar_location import GazeboRobotXLidarLocEnv

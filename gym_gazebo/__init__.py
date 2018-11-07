@@ -13,6 +13,14 @@ register(
     # More arguments here
 )
 
+register(
+    id='GazeboRobotX-v1',
+    entry_point='gym_gazebo.envs.wamv:GazeboRobotXLidarLocEnv',
+    max_episode_steps=100
+    # More arguments here
+)
+
+
 # Turtlebot envs
 register(
     id='GazeboMazeTurtlebotLidar-v0',

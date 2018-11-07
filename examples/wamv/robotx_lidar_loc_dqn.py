@@ -27,7 +27,7 @@ def clear_monitor_files(training_dir):
 
 if __name__ == '__main__':
 
-    env = gym.make('GazeboRobotX-v0')
+    env = gym.make('GazeboRobotX-v1')
     outdir = '/tmp/gazebo_gym_experiments/'
     path = '/tmp/wamv_dqn_ep'
     plotter = liveplot.LivePlot(outdir)
@@ -53,7 +53,7 @@ if __name__ == '__main__':
         learningRate = 0.25
         discountFactor = 0.99
         memorySize = 1000000
-        network_inputs = 5
+        network_inputs = 6
         network_outputs = 3
         network_structure = [10,10]
         current_epoch = 0
@@ -97,7 +97,7 @@ if __name__ == '__main__':
     highest_reward = 0
 
     start_time = time.time()
-
+    raw_input("start")
     #start iterating from 'current epoch'.
     for epoch in xrange(current_epoch+1, epochs+1, 1):
         observation, done = env.reset()
@@ -112,6 +112,8 @@ if __name__ == '__main__':
             qValues = deepQ.getQValues(observation)
 
             action = deepQ.selectAction(qValues, explorationRate)
+
+            print stepCounter, observation, action
 
             newObservation, reward, done, info = env.step(action)
 
