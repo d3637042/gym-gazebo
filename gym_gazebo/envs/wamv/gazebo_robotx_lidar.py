@@ -39,7 +39,7 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
             vel_cmd.left = 500
             self.vel_pub.publish(vel_cmd)
             rospy.sleep(0.5)
-        print "count", count
+        #print "count", count
 
     def discretize_observation(self,data,new_ranges):
         discretized_ranges = np.ones(new_ranges)*5
@@ -76,11 +76,11 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
         return [seed]
 
     def _step(self, action):
-        rospy.wait_for_service('/gazebo/unpause_physics')
-        try:
-            self.unpause()
-        except (rospy.ServiceException) as e:
-            print ("/gazebo/unpause_physics service call failed")
+        #rospy.wait_for_service('/gazebo/unpause_physics')
+        #try:
+        #    self.unpause()
+        #except (rospy.ServiceException) as e:
+        #    print ("/gazebo/unpause_physics service call failed")
 
         if action == 0: #FORWARD
             vel_cmd = UsvDrive()
@@ -104,12 +104,12 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
             except:
                 pass
 
-        rospy.wait_for_service('/gazebo/pause_physics')
-        try:
-            #resp_pause = pause.call()
-            self.pause()
-        except (rospy.ServiceException) as e:
-            print ("/gazebo/pause_physics service call failed")
+        #rospy.wait_for_service('/gazebo/pause_physics')
+        #try:
+        #    #resp_pause = pause.call()
+        #    self.pause()
+        #except (rospy.ServiceException) as e:
+        #    print ("/gazebo/pause_physics service call failed")
 
         state,done = self.discretize_observation(data,5)
 
@@ -134,12 +134,12 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
             print ("/gazebo/reset_simulation service call failed")
 
         # Unpause simulation to make observation
-        rospy.wait_for_service('/gazebo/unpause_physics')
-        try:
-            #resp_pause = pause.call()
-            self.unpause()
-        except (rospy.ServiceException) as e:
-            print ("/gazebo/unpause_physics service call failed")
+        #rospy.wait_for_service('/gazebo/unpause_physics')
+        #try:
+        #    #resp_pause = pause.call()
+        #    self.unpause()
+        #except (rospy.ServiceException) as e:
+        #    print ("/gazebo/unpause_physics service call failed")
 
         #read laser data
         data = None
@@ -149,12 +149,12 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
             except:
                 pass
         self.random_moves()
-        rospy.wait_for_service('/gazebo/pause_physics')
-        try:
-            #resp_pause = pause.call()
-            self.pause()
-        except (rospy.ServiceException) as e:
-            print ("/gazebo/pause_physics service call failed")
+        #rospy.wait_for_service('/gazebo/pause_physics')
+        #try:
+        #    #resp_pause = pause.call()
+        #    self.pause()
+        #except (rospy.ServiceException) as e:
+        #    print ("/gazebo/pause_physics service call failed")
 
         state = self.discretize_observation(data,5)
 

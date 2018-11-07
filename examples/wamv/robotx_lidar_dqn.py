@@ -44,18 +44,18 @@ if __name__ == '__main__':
         #Each time we take a sample and update our weights it is called a mini-batch.
         #Each time we run through the entire dataset, it's called an epoch.
         #PARAMETER LIST
-        epochs = 1000
-        steps = 1000
-        updateTargetNetwork = 10000
+        epochs = 10000
+        steps = 100
+        updateTargetNetwork = 500
         explorationRate = 1
         minibatch_size = 64
         learnStart = 64
-        learningRate = 0.00025
+        learningRate = 0.25
         discountFactor = 0.99
         memorySize = 1000000
         network_inputs = 5
         network_outputs = 3
-        network_structure = [300,300]
+        network_structure = [10,10]
         current_epoch = 0
 
         deepQ = deepq.DeepQ(network_inputs, network_outputs, memorySize, discountFactor, learningRate, learnStart)
