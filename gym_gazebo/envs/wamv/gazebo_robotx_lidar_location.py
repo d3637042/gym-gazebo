@@ -130,7 +130,7 @@ class GazeboRobotXLidarLocEnv(gazebo_env.GazeboEnv):
         state = np.append(state, int(dist_to_target))
         
         dist_reward = 50 - dist_to_target
-     
+        end = False 
         if dist_to_target < 5:
             done = True
             end = True
@@ -184,9 +184,10 @@ class GazeboRobotXLidarLocEnv(gazebo_env.GazeboEnv):
         while loc_data is None:
             try:
                 print "get odometry"
-                loc_data = rospy.wait_for_message('/odometry/filtered', Odometry, timeout=5)
+                loc_data = rospy.wait_for_message('/odometry/filtered', Odometry)
             except:
                 pass
+        print "recieve odometry"
         dist_to_target = np.sqrt((self.target_x-loc_data.pose.pose.position.x)*(self.target_x-loc_data.pose.pose.position.x)+(self.target_y-loc_data.pose.pose.position.y)*(self.target_y-loc_data.pose.pose.position.y))
         state = np.append(state, int(dist_to_target))
         
