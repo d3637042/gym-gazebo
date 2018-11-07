@@ -35,10 +35,11 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
         count = randint(0,9)
         for i in range(count):
             vel_cmd = UsvDrive()
-            vel_cmd.right = -500
-            vel_cmd.left = 500
+            vel_cmd.right = -1
+            vel_cmd.left = 1
             self.vel_pub.publish(vel_cmd)
             rospy.sleep(0.5)
+        rospy.sleep(3)
         #print "count", count
 
     def discretize_observation(self,data,new_ranges):
@@ -51,22 +52,23 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
         for point in sensor_msgs.point_cloud2.read_points(data, skip_nans=True):
             pt_x = point[0]
             pt_y = point[1]
+            pt_z = point[2]
             distance = sqrt(pt_x**2 + pt_y**2)
             angle = atan2(pt_y, pt_x)
-            if ((np.abs(pt_x) > 1.5 or pt_y > 2.5) and distance <= 20 and angle >=0):
+            if ((np.abs(pt_x) > 1.5 or pt_y > 2.5) and distance <= 30 and angle >=0 and pt_z > -1.5):
                 point_arr.append(distance)      
                 angle_arr.append(angle)
         for i, item in enumerate(point_arr):
             k = int(angle_arr[i]/(np.pi/new_ranges))
             if point_arr[i] == float ('Inf') or np.isinf(point_arr[i]):
-                if discretized_ranges[k] < 20:
+                if discretized_ranges[k] < 30:
                     discretized_ranges[k] = 5
             elif np.isnan(point_arr[i]):
                 if discretized_ranges[k] > 0:
                     discretized_ranges[k] = 0
             else:
-                if discretized_ranges[k] > int(point_arr[i]/4):
-                    discretized_ranges[k] = int(point_arr[i]/4)
+                if discretized_ranges[k] > int(point_arr[i]/6):
+                    discretized_ranges[k] = int(point_arr[i]/6)
             if (min_range > point_arr[i] > 0):
                 done = True
         return discretized_ranges,done
@@ -84,18 +86,18 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
 
         if action == 0: #FORWARD
             vel_cmd = UsvDrive()
-            vel_cmd.right = 500
-            vel_cmd.left = 500
+            vel_cmd.right = 0.5
+            vel_cmd.left = 0.5
             self.vel_pub.publish(vel_cmd)
         elif action == 1: #LEFT
             vel_cmd = UsvDrive()
-            vel_cmd.right = 500
-            vel_cmd.left = -500
+            vel_cmd.right = 1
+            vel_cmd.left = -1
             self.vel_pub.publish(vel_cmd)
         elif action == 2: #RIGHT
             vel_cmd = UsvDrive()
-            vel_cmd.right = -500
-            vel_cmd.left = 500
+            vel_cmd.right = -1
+            vel_cmd.left = 1
             self.vel_pub.publish(vel_cmd)
         data = None
         while data is None:
