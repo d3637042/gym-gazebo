@@ -91,18 +91,18 @@ class GazeboRobotXLidarLocEnv(gazebo_env.GazeboEnv):
 
         if action == 0: #FORWARD
             vel_cmd = UsvDrive()
-            vel_cmd.right = 500
-            vel_cmd.left = 500
+            vel_cmd.right = 0.5
+            vel_cmd.left = 0.5
             self.vel_pub.publish(vel_cmd)
         elif action == 1: #LEFT
             vel_cmd = UsvDrive()
-            vel_cmd.right = 500
-            vel_cmd.left = -500
+            vel_cmd.right = 1
+            vel_cmd.left = -1
             self.vel_pub.publish(vel_cmd)
         elif action == 2: #RIGHT
             vel_cmd = UsvDrive()
-            vel_cmd.right = -500
-            vel_cmd.left = 500
+            vel_cmd.right = -1
+            vel_cmd.left = 1
             self.vel_pub.publish(vel_cmd)
         data = None
         while data is None:
@@ -123,13 +123,14 @@ class GazeboRobotXLidarLocEnv(gazebo_env.GazeboEnv):
         loc_data = None
         while loc_data is None:
             try:
-                loc_data = rospy.wait_for_message('/odometry/filtered', odometry, timeout=5)
+                loc_data = rospy.wait_for_message('/odometry/filtered', Odometry, timeout=5)
             except:
                 pass
         dist_to_target = np.sqrt((self.target_x-loc_data.pose.pose.position.x)*(self.target_x-loc_data.pose.pose.position.x)+(self.target_y-loc_data.pose.pose.position.y)*(self.target_y-loc_data.pose.pose.position.y))
         state = np.append(state, int(dist_to_target))
         
         dist_reward = 50 - dist_to_target
+     
         if dist_to_target < 5:
             done = True
             end = True
@@ -171,7 +172,6 @@ class GazeboRobotXLidarLocEnv(gazebo_env.GazeboEnv):
                 data = rospy.wait_for_message('/velodyne_points', PointCloud2, timeout=5)
             except:
                 pass
-        self.random_moves()
         #rospy.wait_for_service('/gazebo/pause_physics')
         #try:
         #    #resp_pause = pause.call()
@@ -183,10 +183,12 @@ class GazeboRobotXLidarLocEnv(gazebo_env.GazeboEnv):
         loc_data = None
         while loc_data is None:
             try:
-                loc_data = rospy.wait_for_message('/odometry/filtered', odometry, timeout=5)
+                print "get odometry"
+                loc_data = rospy.wait_for_message('/odometry/filtered', Odometry, timeout=5)
             except:
                 pass
         dist_to_target = np.sqrt((self.target_x-loc_data.pose.pose.position.x)*(self.target_x-loc_data.pose.pose.position.x)+(self.target_y-loc_data.pose.pose.position.y)*(self.target_y-loc_data.pose.pose.position.y))
         state = np.append(state, int(dist_to_target))
-
+        
+        self.random_moves()
         return state, done

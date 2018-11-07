@@ -97,7 +97,7 @@ if __name__ == '__main__':
     highest_reward = 0
 
     start_time = time.time()
-    raw_input("start")
+    _ = raw_input("start")
     #start iterating from 'current epoch'.
     for epoch in xrange(current_epoch+1, epochs+1, 1):
         observation, done = env.reset()
@@ -108,7 +108,6 @@ if __name__ == '__main__':
         # run until env returns done
         while not done:
             # env.render()
-            print observation
             qValues = deepQ.getQValues(observation)
 
             action = deepQ.selectAction(qValues, explorationRate)
