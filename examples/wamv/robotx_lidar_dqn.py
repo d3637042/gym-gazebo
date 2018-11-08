@@ -53,7 +53,7 @@ if __name__ == '__main__':
         learningRate = 0.25
         discountFactor = 0.99
         memorySize = 1000000
-        network_inputs = 5
+        network_inputs = 6
         network_outputs = 3
         network_structure = [10,10]
         current_epoch = 0
@@ -90,9 +90,9 @@ if __name__ == '__main__':
     env._max_episode_steps = steps # env returns done after _max_episode_steps
     env = gym.wrappers.Monitor(env, outdir,force=not continue_execution, resume=continue_execution)
 
-    last100Scores = [0] * 100
-    last100ScoresIndex = 0
-    last100Filled = False
+    last10Scores = [0] * 10
+    last10ScoresIndex = 0
+    last10Filled = False
     stepCounter = 0
     highest_reward = 0
 
@@ -108,13 +108,13 @@ if __name__ == '__main__':
         # run until env returns done
         while not done:
             # env.render()
-            print observation
             qValues = deepQ.getQValues(observation)
 
             action = deepQ.selectAction(qValues, explorationRate)
 
             newObservation, reward, done, info = env.step(action)
 
+            print epoch, stepCounter, action, newObservation, reward
             cumulated_reward += reward
             if highest_reward < cumulated_reward:
                 highest_reward = cumulated_reward
@@ -130,19 +130,19 @@ if __name__ == '__main__':
             observation = newObservation
 
             if done:
-                last100Scores[last100ScoresIndex] = episode_step
-                last100ScoresIndex += 1
-                if last100ScoresIndex >= 100:
-                    last100Filled = True
-                    last100ScoresIndex = 0
-                if not last100Filled:
+                last10Scores[last10ScoresIndex] = episode_step
+                last10ScoresIndex += 1
+                if last10ScoresIndex >= 10:
+                    last10Filled = True
+                    last10ScoresIndex = 0
+                if not last10Filled:
                     print ("EP " + str(epoch) + " - " + format(episode_step + 1) + "/" + str(steps) + " Episode steps   Exploration=" + str(round(explorationRate, 2)))
                 else :
                     m, s = divmod(int(time.time() - start_time), 60)
                     h, m = divmod(m, 60)
-                    print ("EP " + str(epoch) + " - " + format(episode_step + 1) + "/" + str(steps) + " Episode steps - last100 Steps : " + str((sum(last100Scores) / len(last100Scores))) + " - Cumulated R: " + str(cumulated_reward) + "   Eps=" + str(round(explorationRate, 2)) + "     Time: %d:%02d:%02d" % (h, m, s))
-                    if (epoch)%100==0:
-                        #save model weights and monitoring data every 100 epochs.
+                    print ("EP " + str(epoch) + " - " + format(episode_step + 1) + "/" + str(steps) + " Episode steps - last10 Steps : " + str((sum(last10Scores) / len(last10Scores))) + " - Cumulated R: " + str(cumulated_reward) + "   Eps=" + str(round(explorationRate, 2)) + "     Time: %d:%02d:%02d" % (h, m, s))
+                    if (epoch)%10==0:
+                        #save model weights and monitoring data every 10 epochs.
                         deepQ.saveModel(path+str(epoch)+'.h5')
                         env._flush()
                         copy_tree(outdir,path+str(epoch))

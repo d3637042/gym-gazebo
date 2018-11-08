@@ -43,7 +43,7 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
         #print "count", count
 
     def discretize_observation(self,data,new_ranges):
-        discretized_ranges = np.ones(new_ranges)*5
+        discretized_ranges = np.ones(new_ranges)*10
         min_range = 3.5
         done = False
         mod = data.width/new_ranges
@@ -62,16 +62,19 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
             k = int(angle_arr[i]/(np.pi/new_ranges))
             if point_arr[i] == float ('Inf') or np.isinf(point_arr[i]):
                 if discretized_ranges[k] < 30:
-                    discretized_ranges[k] = 5
+                    discretized_ranges[k] = 10
             elif np.isnan(point_arr[i]):
                 if discretized_ranges[k] > 0:
                     discretized_ranges[k] = 0
             else:
-                if discretized_ranges[k] > int(point_arr[i]/6):
-                    discretized_ranges[k] = int(point_arr[i]/6)
+                if discretized_ranges[k] > int(point_arr[i]/3):
+                    discretized_ranges[k] = int(point_arr[i]/3)
             if (min_range > point_arr[i] > 0):
                 done = True
-        return discretized_ranges,done
+        state_reward = 0
+        for i in range(len(discretized_ranges)):
+            state_reward += discretized_ranges[i]*np.cos((np.pi/new_ranges)*(i+0.5-new_ranges/2))
+        return discretized_ranges, done, state_reward
 
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -113,13 +116,13 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
         #except (rospy.ServiceException) as e:
         #    print ("/gazebo/pause_physics service call failed")
 
-        state,done = self.discretize_observation(data,5)
+        state, done, state_reward = self.discretize_observation(data,6)
 
         if not done:
             if action == 0:
-                reward = 10
+                reward = 10 + state_reward
             else:
-                reward = 0
+                reward = 0 + state_reward
         else:
             reward = -200
 
@@ -158,7 +161,7 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
         #except (rospy.ServiceException) as e:
         #    print ("/gazebo/pause_physics service call failed")
 
-        state = self.discretize_observation(data,5)
+        state, done, state_reward = self.discretize_observation(data,6)
 
 
-        return state
+        return state, done
