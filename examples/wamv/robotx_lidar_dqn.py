@@ -46,11 +46,11 @@ if __name__ == '__main__':
         #PARAMETER LIST
         epochs = 10000
         steps = 100
-        updateTargetNetwork = 500
+        updateTargetNetwork = 100
         explorationRate = 1
         minibatch_size = 64
         learnStart = 64
-        learningRate = 0.25
+        learningRate = 0.01
         discountFactor = 0.99
         memorySize = 1000000
         network_inputs = 6
@@ -160,7 +160,7 @@ if __name__ == '__main__':
 
             episode_step += 1
 
-        explorationRate *= 0.995 #epsilon decay
+        explorationRate *= 0.97 #epsilon decay
         # explorationRate -= (2.0/epochs)
         explorationRate = max (0.05, explorationRate)
 

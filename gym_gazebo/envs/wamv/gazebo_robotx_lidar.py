@@ -55,7 +55,7 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
             pt_z = point[2]
             distance = sqrt(pt_x**2 + pt_y**2)
             angle = atan2(pt_y, pt_x)
-            if ((np.abs(pt_x) > 1.5 or pt_y > 2.5) and distance <= 30 and angle >=0 and pt_z > -1.5):
+            if ((np.abs(pt_x) > 1.5 or pt_y > 2.5) and distance <= 30 and angle >=0):
                 point_arr.append(distance)      
                 angle_arr.append(angle)
         for i, item in enumerate(point_arr):
@@ -69,11 +69,11 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
             else:
                 if discretized_ranges[k] > int(point_arr[i]/3):
                     discretized_ranges[k] = int(point_arr[i]/3)
-            if (min_range > point_arr[i] > 0):
+            if (min_range > point_arr[i]):
                 done = True
         state_reward = 0
         for i in range(len(discretized_ranges)):
-            state_reward += discretized_ranges[i]*np.cos((np.pi/new_ranges)*(i+0.5-new_ranges/2))
+            state_reward += discretized_ranges[i]*np.cos((np.pi/new_ranges)*(i+0.5-new_ranges/2))/10
         return discretized_ranges, done, state_reward
 
     def _seed(self, seed=None):
@@ -94,13 +94,13 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
             self.vel_pub.publish(vel_cmd)
         elif action == 1: #LEFT
             vel_cmd = UsvDrive()
-            vel_cmd.right = 1
-            vel_cmd.left = -1
+            vel_cmd.right = 0.7
+            vel_cmd.left = -0.7
             self.vel_pub.publish(vel_cmd)
         elif action == 2: #RIGHT
             vel_cmd = UsvDrive()
-            vel_cmd.right = -1
-            vel_cmd.left = 1
+            vel_cmd.right = -0.7
+            vel_cmd.left = 0.7
             self.vel_pub.publish(vel_cmd)
         data = None
         while data is None:
@@ -120,7 +120,7 @@ class GazeboRobotXLidarEnv(gazebo_env.GazeboEnv):
 
         if not done:
             if action == 0:
-                reward = 10 + state_reward
+                reward = 5 + state_reward
             else:
                 reward = 0 + state_reward
         else:
